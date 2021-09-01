@@ -9,22 +9,30 @@ import * as serverUtils from '../omnisharp/utils';
 import { createRequest } from '../omnisharp/typeConversion';
 import { HoverProvider, Hover, TextDocument, CancellationToken, Position, MarkdownString } from 'vscode';
 
-export default class OmniSharpHoverProvider extends AbstractSupport implements HoverProvider {
 
-    public async provideHover(document: TextDocument, position: Position, token: CancellationToken): Promise<Hover> {
+export default class OmniSharpHoverProvider extends AbstractSupport implements HoverProvider
+{
+    public async provideHover(document: TextDocument, position: Position, token: CancellationToken): Promise<Hover>
+    {
         let request = createRequest<protocol.QuickInfoRequest>(document, position);
-        try {
+
+        try
+        {
             const response = await serverUtils.getQuickInfo(this._server, request, token);
-            if (!response || !response.Markdown) {
+
+            if (!response || !response.Markdown)
+            {
                 return undefined;
             }
 
             const markdownString = new MarkdownString;
+
             markdownString.appendMarkdown(response.Markdown);
 
             return new Hover(markdownString);
         }
-        catch (error) {
+        catch (error)
+        {
             return undefined;
         }
     }
